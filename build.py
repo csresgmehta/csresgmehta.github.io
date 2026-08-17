@@ -19,12 +19,12 @@ import shutil
 import sys
 from pathlib import Path
 
-SOURCE = Path(r"c:\Projects\csr-website")
+SOURCE = Path(r"d:\Projects\csr-website")
 # The actual deployable website. Kept in its own "docs" subfolder — separate
 # from this generator script — so GitHub Pages can be pointed at it directly
 # (repo Settings -> Pages -> Deploy from branch -> main -> /docs) and the
 # published site never contains this .py file.
-OUTPUT = Path(r"c:\Projects\csr-website-static\docs")
+OUTPUT = Path(r"d:\Projects\csr-website-static\docs")
 
 sys.path.insert(0, str(SOURCE))
 os.chdir(SOURCE)
