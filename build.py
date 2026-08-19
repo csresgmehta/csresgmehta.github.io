@@ -100,6 +100,11 @@ OUTPUT.mkdir(parents=True)
 print("Copying static assets...")
 shutil.copytree(SOURCE / "static", OUTPUT / "static")
 
+# Browsers request /favicon.ico at the site root regardless of any
+# <link rel="icon"> tags, so it needs a copy there too, not just under
+# /static/.
+shutil.copy(SOURCE / "static" / "favicon.ico", OUTPUT / "favicon.ico")
+
 # ============================================================
 # 3. STANDARD PAGES (rendered via the real Flask routes)
 # ============================================================
