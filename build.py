@@ -105,6 +105,12 @@ shutil.copytree(SOURCE / "static", OUTPUT / "static")
 # /static/.
 shutil.copy(SOURCE / "static" / "favicon.ico", OUTPUT / "favicon.ico")
 
+# Tells GitHub Pages which custom domain to serve this site for. Not
+# part of the Flask app, so it has to be written here explicitly - if
+# this step is ever skipped, the rmtree above deletes it and the next
+# push silently breaks the custom domain (this has happened twice).
+(OUTPUT / "CNAME").write_text("www.csradvise.com", encoding="utf-8")
+
 # ============================================================
 # 3. STANDARD PAGES (rendered via the real Flask routes)
 # ============================================================
