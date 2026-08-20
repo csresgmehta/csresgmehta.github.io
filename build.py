@@ -75,6 +75,10 @@ def rewrite_links(html, depth):
     return re.sub(r'(href|src)="(/[^"]*)"', repl, html)
 
 
+SITE_URL = "https://www.csradvise.com"
+sitemap_paths = []
+
+
 def write_page(out_rel_path, html):
     depth = depth_of(out_rel_path)
     html = rewrite_links(html, depth)
@@ -82,6 +86,8 @@ def write_page(out_rel_path, html):
     full_path.parent.mkdir(parents=True, exist_ok=True)
     full_path.write_text(html, encoding="utf-8")
     print("  wrote", out_rel_path)
+    if out_rel_path != "404.html":
+        sitemap_paths.append(out_rel_path)
 
 
 # ============================================================
@@ -532,6 +538,38 @@ webinar_template_filled = WEBINAR_TEMPLATE.replace("%%YOUTUBE_API_KEY%%", YOUTUB
 with app.test_request_context("/webinar/"):
     webinar_html = render_template_string(webinar_template_filled)
 write_page("webinar/index.html", webinar_html)
+
+# ============================================================
+# 6. SITEMAP + ROBOTS.TXT (SEO — helps search engines discover
+#    every page, built from the exact set of pages just written above)
+# ============================================================
+
+print("Generating sitemap.xml and robots.txt...")
+
+
+def page_url(rel_path):
+    if rel_path == "index.html":
+        return f"{SITE_URL}/"
+    return f"{SITE_URL}/{rel_path[:-len('index.html')]}"
+
+
+sitemap_entries = "\n".join(
+    f"  <url><loc>{page_url(p)}</loc></url>" for p in sitemap_paths
+)
+sitemap_xml = (
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    f"{sitemap_entries}\n"
+    "</urlset>\n"
+)
+(OUTPUT / "sitemap.xml").write_text(sitemap_xml, encoding="utf-8")
+
+robots_txt = (
+    "User-agent: *\n"
+    "Allow: /\n"
+    f"Sitemap: {SITE_URL}/sitemap.xml\n"
+)
+(OUTPUT / "robots.txt").write_text(robots_txt, encoding="utf-8")
 
 print()
 print("Build complete ->", OUTPUT)
