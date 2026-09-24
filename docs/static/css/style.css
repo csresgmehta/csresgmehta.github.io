@@ -1156,3 +1156,8 @@ a:hover { color: var(--gold); }
   .footer-bottom-inner { flex-direction: column; text-align: center; }
   .footer-legal a { margin-left: 0; margin-right: 16px; }
 }
+
+/* Tighter spacing for "Why need Consultant?" / "Why Us?" sections */
+.why-tight { padding-top: 16px; }
+.why-tight .section-title.center { margin-bottom: 4px; }
+.why-tight .divider { margin: 4px auto 12px; }
